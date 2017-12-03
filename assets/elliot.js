@@ -23,7 +23,8 @@
 // \\
 // \\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 // (Global) Deleclarations \\
-const settings = require('./settings.json')
+const requestSync = require('sync-request')
+const settings = JSON.parse(requestSync('GET', process.env.settingsJSON).getBody('utf8'))
 
 // \\
 // \\//\\//\\//\\//\\//\\//\\//\\//\\//\\

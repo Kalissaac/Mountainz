@@ -23,7 +23,8 @@
 const CryptoJS = require('crypto-js')
 const Discord = require('discord.js')
 const firebase = require('firebase')
-const settings = require('../../assets/settings.json')
+const requestSync = require('sync-request')
+const settings = JSON.parse(requestSync('GET', process.env.settingsJSON).getBody('utf8'))
 
 module.exports = {
   name: 'verify',
