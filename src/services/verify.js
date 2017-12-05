@@ -63,8 +63,9 @@ module.exports = {
       }
     })
 
-    app.get('/verify', function (request) {
+    app.get('/verify', function (request, response) {
       if (request.query.refresh === 'true') updateAllRoles(client)
+      response.send('Thanks. It\'s not healthy to leave a request unresponded to.')
     })
   },
   restricted: false
