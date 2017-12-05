@@ -79,13 +79,15 @@ function updateMemberRoles (member) {
 function updateAllRoles (client) {
   client.guilds.forEach(guild => {
     firebase.database().ref('hsrr/guild/' + guild.id).once('value').then(function (guildSnapshot) {
-      if (!guildSnapshot.val()) return
-      guild.members.forEach(member => {
-        firebase.database().ref('hsrr/id/' + member.id).once('value').then(function (memberSnapshot) {
-          if (!memberSnapshot.val()) return
-          member.guild.roles.findAll('name', guildSnapshot.val().approvedRole).forEach(role => member.addRole(role).catch(console.error))
+      if (guildSnapshot.val()) {
+        guild.members.forEach(member => {
+          firebase.database().ref('hsrr/id/' + member.id).once('value').then(function (memberSnapshot) {
+            if (memberSnapshot.val()) {
+              member.guild.roles.findAll('name', guildSnapshot.val().approvedRole).forEach(role => member.addRole(role).catch(console.error))
+            }
+          })
         })
-      })
+      }
     })
   })
 }

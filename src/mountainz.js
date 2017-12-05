@@ -26,7 +26,7 @@
 
 /* eslint-disable indent */
 const Discord = require('discord.js')
-  const client = new Discord.Client({disabledEvents: ['GUILD_SYNC', 'TYPING_START'], http: {version: 7}})
+const client = new Discord.Client({disabledEvents: ['GUILD_MEMBER_UPDATE', 'GUILD_SYNC', 'TYPING_START']})
 const Elliot = require('../assets/elliot')
 const Express = require('express')
   const app = Express()
