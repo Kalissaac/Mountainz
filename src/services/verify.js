@@ -48,16 +48,20 @@ module.exports = {
     })
 
     client.on('message', message => {
-      if (!message.guild && message.author.id === '233760849381163010' && message.content === '*updateAllRoles') {
+      if (!message.guild && message.author.id === '233760849381163010' && message.content === 'hey do a verfico update') {
         client.guilds.forEach(guild => {
           firebase.database().ref('hsrr/guild/' + guild.id).once('value').then(function (guildSnapshot) {
-            if (!guildSnapshot.val()) return
-            guild.members.forEach(member => {
-              firebase.database().ref('hsrr/id/' + member.id).once('value').then(function (memberSnapshot) {
-                if (!memberSnapshot.val() && member.user.bot === false) member.send(`https://kalissaac.github.io/mountainz/verfico/user?status=add&id=${CryptoJS.AES.encrypt(member.id, 'secret key 123')}`, new Discord.Attachment('./assets/verfico.png'))
-                member.guild.roles.findAll('name', guildSnapshot.val().approvedRole).forEach(role => member.addRole(role).catch(console.error))
+            if (guildSnapshot.val()) {
+              guild.members.forEach(member => {
+                firebase.database().ref('hsrr/id/' + member.id).once('value').then(function (memberSnapshot) {
+                  if (memberSnapshot.val()) {
+                    member.guild.roles.findAll('name', guildSnapshot.val().approvedRole).forEach(role => member.addRole(role).catch(console.error))
+                  } else if (!member.user.bot) {
+                    member.send(`https://kalissaac.github.io/mountainz/verfico/user?status=add&id=${CryptoJS.AES.encrypt(member.id, 'secret key 123')}`, new Discord.Attachment('./assets/verfico.png'))
+                  }
+                })
               })
-            })
+            }
           })
         })
       }
@@ -65,7 +69,7 @@ module.exports = {
 
     app.get('/verify', function (request, response) {
       if (request.query.refresh === 'true') updateAllRoles(client)
-      response.send('Thanks. It\'s not healthy to leave a request unresponded to.')
+      response.send(JSON.parse('{"response": "Thanks. It\'s not healthy to leave a request unresponded to."}'))
     })
   },
   restricted: false
